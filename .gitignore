@@ -1,0 +1,30 @@
+# ===========================
+# Python
+# ===========================
+backend/venv/
+__pycache__/
+*.pyc
+
+# ===========================
+# React / Node
+# ===========================
+frontend/node_modules/
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# Upload folder
+uploads/
+
+# VS Code
+.vscode/
+
+# Operating System
+.DS_Store
+Thumbs.db
