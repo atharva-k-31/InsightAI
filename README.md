@@ -170,16 +170,7 @@ This project is licensed under the MIT License.
 
 ---
 
-## 👨‍💻 Author
 
-**Atharva Kalambe**
-
-AI & Machine Learning Undergraduate
-## 👨‍💻 Project Owner
-
-**Atharva Kalambe**
-
-AI & Machine Learning Undergraduate
 ## 👨‍💻 Author
 
 **Atharva Kalambe**
