@@ -29,24 +29,33 @@ def home():
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        # Read CSV or Excel
-        if file.filename.endswith(".csv"):
-            df = pd.read_csv(file.file)
-        elif file.filename.endswith(".xlsx"):
-            df = pd.read_excel(file.file)
-        else:
-            return {"error": "Only CSV and Excel files are allowed"}
+        filename = file.filename.lower()
 
+        # Read uploaded file
+        if filename.endswith(".csv"):
+            df = pd.read_csv(file.file)
+
+        elif filename.endswith(".xlsx"):
+            df = pd.read_excel(file.file)
+
+        else:
+            return {
+                "success": False,
+                "error": "Only CSV and Excel files are allowed."
+            }
+
+        # Response to frontend
         return {
-    "success": True,
-    "filename": file.filename,
-    "shape": {
-        "rows": df.shape[0],
-        "columns": df.shape[1]
-    },
-    "column_names": list(df.columns),
-    "preview": df.head(5).fillna("").to_dict(orient="records")
-}
+            "success": True,
+            "filename": file.filename,
+            "row_count": int(len(df)),
+            "column_count": int(len(df.columns)),
+            "column_names": list(df.columns),
+            "preview": df.head(5).fillna("").to_dict(orient="records")
+        }
 
     except Exception as e:
-        return {"error": str(e)}
+        return {
+            "success": False,
+            "error": str(e)
+        }
