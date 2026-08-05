@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import "../styles/UploadBox.css";
+import uploadIcon from "../assets/dataset.png";
 
 function UploadBox() {
 
@@ -8,6 +9,8 @@ function UploadBox() {
 
   const [preview, setPreview] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [columnInfo, setColumnInfo] = useState([]);
+  const [statistics, setStatistics] = useState([]);
 
   const [fileName, setFileName] = useState("");
   const [rows, setRows] = useState(0);
@@ -44,6 +47,10 @@ function UploadBox() {
 
       setColumns(response.data.column_names || []);
 
+      setColumnInfo(response.data.column_info || []);
+
+      setStatistics(response.data.statistics || []);
+
       setFileName(response.data.filename || "Unknown");
 
       setRows(response.data.row_count || 0);
@@ -74,6 +81,21 @@ function UploadBox() {
         response.data.filename
       );
 
+      console.log(
+        "column_names:",
+        response.data.column_names
+      );
+
+      console.log(
+        "Column Information:",
+        response.data.column_info
+      );
+
+      console.log(
+        "Statistics:",
+         response.data.statistics
+        );
+
 
       alert("Dataset uploaded successfully!");
 
@@ -99,7 +121,7 @@ function UploadBox() {
 
 
         <div className="upload-icon">
-          ☁️
+          <img src={uploadIcon} alt="Upload Icon" />
         </div>
 
 
@@ -241,32 +263,75 @@ function UploadBox() {
 
 
 
+        {columnInfo.length > 0 && (
+
+          <div className="dataset-info">
+
+            <h2>📋 Dataset Information</h2>
+
+            <div className="table-container">
+
+              <table className="info-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Column Name</th>
+                    <th>Data Type</th>
+                    <th>Null Values</th>
+                    <th>Non-Null Values</th>
+                    <th>Unique Values</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {columnInfo.map((column, index) => (
+
+                    <tr key={index}>
+
+                      <td>{column.column_name}</td>
+
+                      <td>{column.data_type}</td>
+
+                      <td>{column.null_values}</td>
+
+                      <td>{column.non_null_values}</td>
+
+                      <td>{column.unique_values}</td>
+
+                    </tr>
+
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        )}
+
 
 
 
         {preview.length > 0 && (
 
-          <div
-            style={{
-              marginTop: "40px",
-              width: "100%",
-              overflowX: "auto"
-            }}
-          >
-
+          <div className="dataset-preview">
 
             <h2>
               📊 Dataset Preview
             </h2>
 
+            <div className="table-container">
+              <table className="preview-table">
 
-
-
-            <table
-              border="1"
-              cellPadding="8"
-            >
-
+            
 
               <thead>
 
@@ -284,16 +349,11 @@ function UploadBox() {
 
               </thead>
 
-
-
-
               <tbody>
-
 
                 {preview.map((row, index) => (
 
                   <tr key={index}>
-
 
                     {columns.map((col) => (
 
@@ -305,20 +365,62 @@ function UploadBox() {
 
                     ))}
 
-
                   </tr>
 
                 ))}
 
-
               </tbody>
 
+              </table>
 
-            </table>
-
-
+            </div>
+          
           </div>
 
+
+        )}
+
+        {statistics.length > 0 && (
+          
+          <div className="statistics-section">
+
+            <h2>📈 Statistical Summary</h2>
+
+            <div className="table-container">
+
+              <table className="statistics-table">
+                
+                <thead>
+                  <tr>
+                    <th>Column</th>
+                    <th>Mean</th>
+                    <th>Variance</th>
+                    <th>Std Dev</th>
+                    <th>Min</th>
+                    <th>25%</th>
+                    <th>Median</th>
+                    <th>75%</th>
+                    <th>Max</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {statistics.map((item,index)=>(
+                    <tr key={index}>
+                      <td>{item.column_name}</td>
+                      <td>{item.mean}</td>
+                      <td>{item.variance}</td>
+                      <td>{item.std}</td>
+                      <td>{item.min}</td>
+                      <td>{item.q1}</td>
+                      <td>{item.median}</td>
+                      <td>{item.q3}</td>
+                      <td>{item.max}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
 
 
@@ -331,6 +433,5 @@ function UploadBox() {
   );
 
 }
-
 
 export default UploadBox;
